@@ -9,9 +9,15 @@ export interface SelectDates {
   day: number | null;
 }
 
+export type getMonthFromYear = {
+  month: string;
+};
+
 export interface CalenderProps {
   currentCalendar: CalendarSelectionType;
   SelectedDates: SelectDates;
+  navigateMonth: (month: getMonthFromYear) => void;
+  changeCalenderSelection: (calenderSelection: CalendarSelectionType) => void;
 }
 
 export interface getTotalDaysTypes {
@@ -24,4 +30,6 @@ export interface MonthYearCalenderProps {
   today: SelectDates;
   CurrentDateUser: SelectDates;
   getTotalDays?: getTotalDaysTypes;
+  navigateMonth?: (month: getMonthFromYear) => void;
+  changeCalenderSelection?: (calenderSelection: CalendarSelectionType) => void;
 }

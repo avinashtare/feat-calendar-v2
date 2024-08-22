@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import Calender from "./Calender";
 import { months } from "./calender-constants";
-import { CalendarSelectionType, SelectDates } from "./types";
+import { CalendarSelectionType, getMonthFromYear, SelectDates } from "./types";
 import { getYearMonth } from "./Date.Uitls";
 import "./style.css";
 
@@ -26,6 +26,11 @@ const Schedule: React.FC = () => {
     year: null,
     day: null,
   });
+
+  // suer click on month from year section
+  const handleClickYear = ({ month }: getMonthFromYear): void => {
+    setDates({ ...SelectDates, month });
+  };
 
   useEffect(() => {
     const { month, year, day } = getYearMonth();
@@ -115,6 +120,8 @@ const Schedule: React.FC = () => {
         <Calender
           currentCalendar={calendarSelection}
           SelectedDates={SelectDates}
+          navigateMonth={handleClickYear}
+          changeCalenderSelection={changeCalenderSelection}
         />
       </div>
     </>

@@ -12,6 +12,8 @@ import { getTotalDays, getYearMonth } from "./Date.Uitls";
 const Calender: React.FC<CalenderProps> = ({
   currentCalendar,
   SelectedDates,
+  navigateMonth,
+  changeCalenderSelection,
 }) => {
   const [CurrentDateUser, setCurrentDateShow] = useState<getTotalDaysTypes>({
     lastMonth: null,
@@ -44,7 +46,12 @@ const Calender: React.FC<CalenderProps> = ({
   return (
     <div className="w-full mt-5">
       {CalendarSelectionType.Year == currentCalendar ? (
-        <YearCalander today={Today} CurrentDateUser={SelectedDates} />
+        <YearCalander
+          today={Today}
+          changeCalenderSelection={changeCalenderSelection}
+          CurrentDateUser={SelectedDates}
+          navigateMonth={navigateMonth}
+        />
       ) : (
         ""
       )}
@@ -64,24 +71,32 @@ const Calender: React.FC<CalenderProps> = ({
 const YearCalander: React.FC<MonthYearCalenderProps> = ({
   today,
   CurrentDateUser,
+  navigateMonth,
+  changeCalenderSelection,
 }) => {
   return (
     <>
       <div className="grid grid-cols-3 gap-3 w-full">
-        {months.map((month, index) => (
-          <div
-            key={index}
-            className={`border-transparent border border-t-gray-500 h-auto aspect-[12/5]  hover:bg-[rgba(13,13,13,0.26)] cursor-pointer ${
-              today.month == month && CurrentDateUser.year == today.year
-                ? "border-t-sky-600 "
-                : ""
-            }`}
-          >
-            <span className="p-2 font-semibold text-white text-sm text-right font-sans block">
-              {month}
-            </span>
-          </div>
-        ))}
+        {navigateMonth &&
+          changeCalenderSelection &&
+          months.map((month, index) => (
+            <div
+              key={index}
+              onClick={(): void => {
+                navigateMonth({ month });
+                changeCalenderSelection(CalendarSelectionType.Month);
+              }}
+              className={`border-transparent border border-t-gray-500 h-auto aspect-[12/5]  hover:bg-[rgba(13,13,13,0.26)] cursor-pointer ${
+                today.month == month && CurrentDateUser.year == today.year
+                  ? "border-t-sky-600 "
+                  : ""
+              }`}
+            >
+              <span className="p-2 font-semibold text-white text-sm text-right font-sans block">
+                {month}
+              </span>
+            </div>
+          ))}
       </div>
     </>
   );
