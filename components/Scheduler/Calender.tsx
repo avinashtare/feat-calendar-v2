@@ -14,6 +14,7 @@ const Calender: React.FC<CalenderProps> = ({
   SelectedDates,
   navigateMonth,
   changeCalenderSelection,
+  getClikedDay,
 }) => {
   const [CurrentDateUser, setCurrentDateShow] = useState<getTotalDaysTypes>({
     lastMonth: null,
@@ -60,6 +61,7 @@ const Calender: React.FC<CalenderProps> = ({
           today={Today}
           CurrentDateUser={SelectedDates}
           getTotalDays={CurrentDateUser}
+          getClikedDay={getClikedDay}
         />
       ) : (
         ""
@@ -106,6 +108,7 @@ const MonthsCalander: React.FC<MonthYearCalenderProps> = ({
   today,
   CurrentDateUser,
   getTotalDays,
+  getClikedDay,
 }) => {
   return (
     <>
@@ -123,7 +126,9 @@ const MonthsCalander: React.FC<MonthYearCalenderProps> = ({
       <div className="grid grid-cols-7 gap-1 w-full">
         {getTotalDays?.presentFirstDay &&
           Array.from({ length: 35 }).map((_, index) => {
-            let currentDate = 0;
+            let currentDate = null;
+            let currentYear = CurrentDateUser.year;
+            let currentMonth = CurrentDateUser.month;
             if (
               getTotalDays?.presentFirstDay !== null &&
               getTotalDays.present != null &&
@@ -136,10 +141,45 @@ const MonthsCalander: React.FC<MonthYearCalenderProps> = ({
                   getTotalDays.presentFirstDay +
                   index +
                   2;
+
+                // get this find for months
+                if (CurrentDateUser.month) {
+                  if (
+                    months.indexOf(CurrentDateUser.month) - 1 < 0 &&
+                    CurrentDateUser.year
+                  ) {
+                    currentMonth = months[11];
+                    currentMonth = months[0];
+                    currentYear = (
+                      parseInt(CurrentDateUser.year) - 1
+                    ).toString();
+                  } else {
+                    currentMonth =
+                      months[months.indexOf(CurrentDateUser.month) - 1];
+                  }
+                }
               } else {
                 let day = index - getTotalDays.presentFirstDay + 2;
+                if (CurrentDateUser.month)
+                  currentMonth = months[months.indexOf(CurrentDateUser.month)];
+
                 if (getTotalDays.present < day) {
                   day = day % getTotalDays.present;
+
+                  // find month if user click on like current month is aug then user click on july 11 or sep 1
+                  if (CurrentDateUser.month)
+                    currentMonth =
+                      months[months.indexOf(CurrentDateUser.month) + 1];
+                  if (
+                    CurrentDateUser.month &&
+                    months.indexOf(CurrentDateUser.month) >= 11 &&
+                    CurrentDateUser.year
+                  ) {
+                    currentMonth = months[0];
+                    currentYear = (
+                      parseInt(CurrentDateUser.year) + 1
+                    ).toString();
+                  }
                 }
 
                 newDate = day;
@@ -159,6 +199,14 @@ const MonthsCalander: React.FC<MonthYearCalenderProps> = ({
                       ? "bg-sky-600 hover:bg-sky-400"
                       : "hover:bg-[rgba(13,13,13,0.26)]"
                   }`}
+                  onClick={() => {
+                    getClikedDay &&
+                      getClikedDay({
+                        day: currentDate,
+                        month: currentMonth,
+                        year: currentYear,
+                      });
+                  }}
                 >
                   <span className="p-2 font-semibold text-white text-sm">
                     {currentDate}

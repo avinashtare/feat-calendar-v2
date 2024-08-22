@@ -2,14 +2,33 @@
 import React, { useEffect, useState } from "react";
 import Calender from "./Calender";
 import { months } from "./calender-constants";
-import { CalendarSelectionType, getMonthFromYear, SelectDates } from "./types";
+import {
+  CalendarSelectionType,
+  getMonthFromYear,
+  SelectDates,
+  SchedulerProps,
+  ModalActionsState,
+} from "./types";
 import { getYearMonth } from "./Date.Uitls";
 import "./style.css";
+import CalenderModal from "./Calender.Modal";
+import { setMaxIdleHTTPParsers } from "http";
 
-const Schedule: React.FC = () => {
+const Schedule: React.FC<SchedulerProps> = ({ selectedDate }) => {
   const [calendarSelection, setCalendarSelection] = useState(
     CalendarSelectionType.Month
   );
+
+  const [SelectDates, setDates] = useState<SelectDates>({
+    month: null,
+    year: null,
+    day: null,
+  });
+
+  const [ModalActions, setModalActions] = useState<ModalActionsState>({
+    show: false,
+    clickdDates: { month: null, year: null, day: null },
+  });
 
   const changeCalenderSelection = (
     calenderSelection: CalendarSelectionType
@@ -21,17 +40,21 @@ const Schedule: React.FC = () => {
     }
   };
 
-  const [SelectDates, setDates] = useState<SelectDates>({
-    month: null,
-    year: null,
-    day: null,
-  });
-
   // suer click on month from year section
   const handleClickYear = ({ month }: getMonthFromYear): void => {
     setDates({ ...SelectDates, month });
   };
 
+  // user click on dates
+  const userClickDate = ({ day, month, year }: SelectDates) => {
+    setModalActions({ show: true, clickdDates: { day, month, year } });
+  };
+
+  const closeModal = () => {
+    setModalActions({ ...ModalActions, show: false });
+  };
+
+  // init
   useEffect(() => {
     const { month, year, day } = getYearMonth();
     setDates({ month, year, day });
@@ -39,6 +62,11 @@ const Schedule: React.FC = () => {
 
   return (
     <>
+      <CalenderModal
+        selectedDate={selectedDate}
+        modalActions={ModalActions}
+        closeModal={closeModal}
+      />
       <div className="bg-[#1E1E1E] w-full p-4 rounded-lg">
         <div className="title">
           <span className="text-white">Workout Schedule</span>
@@ -122,6 +150,7 @@ const Schedule: React.FC = () => {
           SelectedDates={SelectDates}
           navigateMonth={handleClickYear}
           changeCalenderSelection={changeCalenderSelection}
+          getClikedDay={userClickDate}
         />
       </div>
     </>
