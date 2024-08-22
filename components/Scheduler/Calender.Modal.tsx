@@ -7,8 +7,8 @@ import React, {
   useState,
 } from "react";
 import { IoMdClose } from "react-icons/io";
-import { CalenderModalProps, UserData } from "./types";
-import { months } from "./calender-constants";
+import { CalenderModalProps, UserData } from "./types/types";
+import { months } from "./utils/calender-constants";
 
 const CalenderModal: React.FC<CalenderModalProps> = ({
   selectedDate,

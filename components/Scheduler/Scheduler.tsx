@@ -1,15 +1,15 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Calender from "./Calender";
-import { months } from "./calender-constants";
+import { months } from "./utils/calender-constants";
 import {
   CalendarSelectionType,
   getMonthFromYear,
   SelectDates,
   SchedulerProps,
   ModalActionsState,
-} from "./types";
-import { getYearMonth } from "./Date.Uitls";
+} from "./types/types";
+import { getYearMonth } from "./utils/Date.Uitls";
 import "./style.css";
 import CalenderModal from "./Calender.Modal";
 import { setMaxIdleHTTPParsers } from "http";

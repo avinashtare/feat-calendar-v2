@@ -1,5 +1,5 @@
 import { months } from "./calender-constants";
-import { getTotalDaysTypes } from "./types";
+import { getTotalDaysTypes } from "../types/types";
 export const getYearMonth = () => {
   let dateObj = new Date();
 

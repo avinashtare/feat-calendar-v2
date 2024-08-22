@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import Schedule from "@/components/Scheduler/Scheduler";
-import { UserData } from "@/components/Scheduler/types";
+import { UserData } from "@/components/Scheduler/types/types";
 
 const page: React.FC = () => {
   const calanderDateSelected = (data: UserData) => {
